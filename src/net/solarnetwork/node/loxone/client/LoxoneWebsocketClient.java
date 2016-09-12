@@ -13,8 +13,6 @@ import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +21,9 @@ public class LoxoneWebsocketClient {
 
 	private Session session = null;
 
-	private String host;
-	private String username;
-	private String password;
+	private String host = "test";
+	private String username = "test";
+	private String password = "test";
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -34,7 +32,7 @@ public class LoxoneWebsocketClient {
 				.createClient(org.glassfish.tyrus.container.jdk.client.JdkClientContainer.class.getName());
 		session = null;
 		try {
-			log.debug("Opening Loxone websocket connection to ws://" + host);
+			log.debug(String.format("Opening Loxone websocket connection to ws://", host));
 			session = container.connectToServer(getClass(), new URI("ws://" + host));
 		} catch ( DeploymentException e ) {
 			e.printStackTrace();
@@ -72,60 +70,56 @@ public class LoxoneWebsocketClient {
 		
 		log.debug("Message recieved: " + message);
 		
-		log.debug("parsing JSON");
-		
-		JSONObject response = new JSONObject(message);
-		
-		log.debug(this.toString());
+//		JSONObject response = new JSONObject(message);
 
-		String responseControl = response.getJSONObject("LL").getString("control");
-		String responseCode = response.getJSONObject("LL").getString("Code");
+//		String responseControl = response.getJSONObject("LL").getString("control");
+//		String responseCode = response.getJSONObject("LL").getString("Code");
 		
 		log.debug("TEST1: " + this.host + ", " + this.username + ", " + this.password);
 		log.debug("TEST2: " + host + ", " + username + ", " + password);
 		
-		if(!responseCode.equals("200")){
-			log.debug("Error: bad response(" + responseCode + ")\n" + message);
-			return;
-		}
+//		if(!responseCode.equals("200")){
+//			log.debug("Error: bad response(" + responseCode + ")\n" + message);
+//			return;
+//		}
 		
-		log.debug("Control: " + responseControl + ", Code: " + responseCode);
-		if (responseControl.equals("jdev/sys/getkey")) {
-			
-			log.debug("Got authentication key");
-			
-			String key = response.getJSONObject("LL").getString("value");
-			key = Crypto.hexToString(key);
-			
-			log.debug("Decoded key: " + key);
-			
-			String authString = this.username + ":" + this.password;
-			String hash = Crypto.createHmacSha1Hash(authString, key);
-			
-			log.debug("Auth string: " + authString);
-			
-			log.debug("Hash: " + hash);
-			
-			log.debug("Authenticating ...");
-			
-			try {
-				session.getBasicRemote().sendText("authenticate/" + hash);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}else if (responseControl.equals("Auth")) {
-			
-			log.debug("Authenticated");
-			log.debug("Checking LoxAPP...");
-			
-			try {
-				session.getBasicRemote().sendText("jdev/sps/LoxAPPversion3");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
+//		log.debug("Control: " + responseControl + ", Code: " + responseCode);
+//		if (responseControl.equals("jdev/sys/getkey")) {
+//			
+//			log.debug("Got authentication key");
+//			
+//			String key = response.getJSONObject("LL").getString("value");
+//			key = Crypto.hexToString(key);
+//			
+//			log.debug("Decoded key: " + key);
+//			
+//			String authString = this.username + ":" + this.password;
+//			String hash = Crypto.createHmacSha1Hash(authString, key);
+//			
+//			log.debug("Auth string: " + authString);
+//			
+//			log.debug("Hash: " + hash);
+//			
+//			log.debug("Authenticating ...");
+//			
+//			try {
+//				session.getBasicRemote().sendText("authenticate/" + hash);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			
+//		}else if (responseControl.equals("Auth")) {
+//			
+//			log.debug("Authenticated");
+//			log.debug("Checking LoxAPP...");
+//			
+//			try {
+//				session.getBasicRemote().sendText("jdev/sps/LoxAPPversion3");
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			
+//		}
 	}
 
 //	CLOSE
