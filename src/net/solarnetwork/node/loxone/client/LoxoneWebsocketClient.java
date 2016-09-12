@@ -65,11 +65,6 @@ public class LoxoneWebsocketClient {
 	public void onMessage(ByteBuffer byteBuffer) {
 		log.debug("Binary message recieved: " + byteBuffer.toString());
 	}
-	
-	public void test() {
-		log.debug("TEST1: " + this.host + ", " + this.username + ", " + this.password);
-		log.debug("TEST2: " + host + ", " + username + ", " + password);
-	}
 
 //	MESSAGE STRING
 	@OnMessage
@@ -86,7 +81,8 @@ public class LoxoneWebsocketClient {
 		String responseControl = response.getJSONObject("LL").getString("control");
 		String responseCode = response.getJSONObject("LL").getString("Code");
 		
-		test();
+		log.debug("TEST1: " + this.host + ", " + this.username + ", " + this.password);
+		log.debug("TEST2: " + host + ", " + username + ", " + password);
 		
 		if(!responseCode.equals("200")){
 			log.debug("Error: bad response(" + responseCode + ")\n" + message);
