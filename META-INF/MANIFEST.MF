@@ -23,3 +23,5 @@ Import-Package: javax.websocket;version="1.1.0",
  org.springframework.context.support;version="4.2.6.RELEASE",
  org.springframework.core;version="4.2.6.RELEASE",
  org.springframework.scheduling.quartz;version="4.2.6.RELEASE"
+Bundle-ClassPath: .,
+ lib/org.everit.osgi.bundles.org.json-1.0.0.jar

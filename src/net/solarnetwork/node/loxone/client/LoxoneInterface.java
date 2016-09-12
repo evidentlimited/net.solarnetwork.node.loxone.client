@@ -1,31 +1,31 @@
+
 package net.solarnetwork.node.loxone.client;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-
 import net.solarnetwork.node.settings.SettingSpecifier;
 import net.solarnetwork.node.settings.SettingSpecifierProvider;
 import net.solarnetwork.node.settings.support.BasicTextFieldSettingSpecifier;
 
 public class LoxoneInterface implements SettingSpecifierProvider {
-	
+
 	private MessageSource messageSource;
 	private String sourceId;
 	private String host;
 	private String username;
 	private String password;
 	private LoxoneWebsocketClient client = new LoxoneWebsocketClient();
-	
+	private LoxoneConfig config = new LoxoneConfig();
+
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	public LoxoneInterface() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	/* Setting Specifier Provider */
 
 	@Override
@@ -42,7 +42,7 @@ public class LoxoneInterface implements SettingSpecifierProvider {
 	public MessageSource getMessageSource() {
 		return messageSource;
 	}
-	
+
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
@@ -50,39 +50,37 @@ public class LoxoneInterface implements SettingSpecifierProvider {
 	@Override
 	public List<SettingSpecifier> getSettingSpecifiers() {
 		LoxoneInterface defaults = new LoxoneInterface();
-	    List<SettingSpecifier> results = new ArrayList<SettingSpecifier>(4);
-	    results.add(new BasicTextFieldSettingSpecifier("sourceId", defaults.getSourceId()));
-	    results.add(new BasicTextFieldSettingSpecifier("host", defaults.getHost()));
-	    results.add(new BasicTextFieldSettingSpecifier("username", defaults.getUsername()));
-	    results.add(new BasicTextFieldSettingSpecifier("password", defaults.getPassword(), true));
-	    return results;
+		List<SettingSpecifier> results = new ArrayList<SettingSpecifier>(4);
+		results.add(new BasicTextFieldSettingSpecifier("sourceId", defaults.getSourceId()));
+		results.add(new BasicTextFieldSettingSpecifier("host", defaults.getHost()));
+		results.add(new BasicTextFieldSettingSpecifier("username", defaults.getUsername()));
+		results.add(new BasicTextFieldSettingSpecifier("password", defaults.getPassword(), true));
+		return results;
 	}
-	
+
 	public void shutdown() {
 		log.debug("SHUTDOWN");
-	}
-	
-	private void updateConnection() {
-		log.debug("Updating Loxone connecting");
-		log.debug("host: " + host);
-		log.debug("username: " + username);
-		log.debug("password: " + password);
-		if(host == null || username == null || password == null || host.isEmpty() || username.isEmpty() || password.isEmpty()) {
-			log.debug("Aborting update, some fields are empty");
+		if ( client != null ) {
 			client.close();
+		}
+	}
+
+	private void updateConnection() {
+		log.debug("Updating Loxone connection host {} username {} password {}", host, username,
+				password);
+		if ( host == null || username == null || password == null || host.isEmpty() || username.isEmpty() || password.isEmpty() ) {
 			return;
 		}
-		
-		if(client == null) {
+
+		if ( client == null ) {
 			log.debug("Creating Loxone websocket connection");
 			client = new LoxoneWebsocketClient();
 		}
-		
+
 		client.open(host, username, password);
-		
 	}
-	
-//	Getters and setters
+
+	//	Getters and setters
 
 	public String getSourceId() {
 		return sourceId;
@@ -91,11 +89,11 @@ public class LoxoneInterface implements SettingSpecifierProvider {
 	public void setSourceId(String sourceId) {
 		this.sourceId = sourceId;
 	}
-	
+
 	public String getHost() {
 		return host;
 	}
-	
+
 	public void setHost(String host) {
 		log.debug("set host: " + host);
 		this.host = host;
