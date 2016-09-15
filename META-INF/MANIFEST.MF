@@ -4,7 +4,10 @@ Bundle-Name: Loxone Websocket Client
 Bundle-SymbolicName: net.solarnetwork.node.loxone.client
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.fasterxml.jackson.core.json;version="2.4.3",
+Import-Package: com.fasterxml.jackson.annotation;version="2.4.3",
+ com.fasterxml.jackson.core;version="2.4.3",
+ com.fasterxml.jackson.core.json;version="2.4.3",
+ com.fasterxml.jackson.databind;version="2.4.3",
  javax.websocket;version="1.1.0",
  net.solarnetwork.node.dao;version="1.7.0",
  net.solarnetwork.node.domain;version="1.7.0",

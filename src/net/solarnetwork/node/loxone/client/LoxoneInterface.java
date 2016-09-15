@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+
+import net.solarnetwork.node.loxone.config.Config;
 import net.solarnetwork.node.settings.SettingSpecifier;
 import net.solarnetwork.node.settings.SettingSpecifierProvider;
 import net.solarnetwork.node.settings.support.BasicTextFieldSettingSpecifier;
@@ -18,7 +20,7 @@ public class LoxoneInterface implements SettingSpecifierProvider {
 	private String username;
 	private String password;
 	private LoxoneWebsocketClient client = new LoxoneWebsocketClient();
-	private LoxoneConfig config = new LoxoneConfig();
+	private Config config = new Config();
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
